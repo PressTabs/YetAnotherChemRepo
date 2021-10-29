@@ -5,7 +5,6 @@ def formulator(formula: str) -> tuple[list[str], list[int], int]:
     charge: int = 0
 
     polyatomic_started: bool = False
-    element_started: bool = False
 
     element: str = ""
 
@@ -14,7 +13,11 @@ def formulator(formula: str) -> tuple[list[str], list[int], int]:
     subscript: str = ""
 
     #   Going for a pure interpreter style so won't use .split() to obtain the charge, using if check instead
-    for char in formula:
+    counter: int = 0
+    length: int = len(formula)
+
+    while counter < length:
+        char: str = formula[counter]
 
         if polyatomic_started:
 
@@ -64,6 +67,29 @@ def formulator(formula: str) -> tuple[list[str], list[int], int]:
 
                     subscript_list.append(int(subscript))
                     subscript = ""
+
+        elif char == "[":
+
+            str_charge: str = ""
+            sign: int = 1
+
+            for index in range(counter + 1, length):
+
+                charge_char: str = formula[index]
+
+                if charge_char.isdigit():
+
+                    str_charge += charge_char
+
+                elif charge_char == "-":
+
+                    sign *= -1
+
+            charge = sign * int(str_charge)
+
+            break
+
+        counter += 1
 
     if element != "":
 
