@@ -1,4 +1,32 @@
+from unit import Unit
+
 #   Won't support abbreviations for now cus I'm cool
+
+#   Exponential notation, i.e 10 ^ n where n is the value from the key
+prefixes: dict[str, int] = {
+    "kilo": 3,
+    "hecto": 2,
+    "deca": 1,
+    "": 0,
+    "deci": -1,
+    "centi": -2,
+    "milli": -3
+}
+
+units: dict[str, Unit] = {
+    "mole": Unit.MOLE,
+    "gram": Unit.GRAM,
+    "atom": Unit.ATOM,
+    "liter": Unit.LITER,
+    "joule": Unit.JOULE,
+    "kelvin": Unit.KELVIN,
+    "celsius": Unit.CELSIUS,
+    "particle": Unit.PARTICLE,
+    "molecule": Unit.MOLECULE,
+    "atmosphere": Unit.ATMOSPHERE,
+    "torricelli": Unit.TORRICELLI
+}
+
 
 def unit_breakup(metric_unit: str) -> tuple[str, str]:
     """Breaks up a prefix and a unit into the prefix and unit individually"""
