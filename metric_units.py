@@ -2,12 +2,11 @@ from unit import Unit
 
 #   Won't support abbreviations for now cus I'm cool
 
-#   Exponential notation, i.e 10 ^ n where n is the value from the key
+#   Exponential notation, i.e 10 ^ n where n is the value from the key ("" wont be included)
 prefixes: dict[str, int] = {
     "kilo": 3,
     "hecto": 2,
     "deca": 1,
-    "": 0,
     "deci": -1,
     "centi": -2,
     "milli": -3
@@ -26,6 +25,18 @@ units: dict[str, Unit] = {
     "atmosphere": Unit.ATMOSPHERE,
     "torricelli": Unit.TORRICELLI
 }
+
+prefix_lengths: list[int] = [len(prefix) for prefix in prefixes]
+unit_lengths: list[int] = [len(unit) for unit in units]
+
+unique_prefix_lengths: list[int] = [length for counter, length in enumerate(prefix_lengths) if length not in prefix_lengths[:counter]]
+unique_unit_lengths: list[int] = [length for counter, length in enumerate(unit_lengths) if length not in unit_lengths[:counter]]
+
+unique_prefix_lengths.sort()
+unique_unit_lengths.sort()
+
+unique_prefix_lengths.reverse()
+unique_unit_lengths.reverse()
 
 
 def unit_breakup(metric_unit: str) -> tuple[str, str]:
