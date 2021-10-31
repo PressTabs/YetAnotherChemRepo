@@ -28,6 +28,10 @@ units: dict[str, Unit] = {
 
 #   ^^^ These are the only dictionaries that need to be edited
 
+#   This block of code will run on import so that the unit_breakup works efficiently. And some this only needs to be
+#   done once per run it's overall a benefit given a large enough dataset, plus it makes the algorithm easier to
+#   read
+
 prefix_lengths: list[int] = [len(prefix) for prefix in prefixes]
 unit_lengths: list[int] = [len(unit) for unit in units]
 
@@ -61,8 +65,6 @@ def unit_breakup(metric_unit: str) -> tuple[str, str]:
 
     prefix_length: int = len(prefix)
 
-    unit: str = ""
-
     for unit_length in unique_unit_lengths:
 
         if length > unit_length - 1:
@@ -70,10 +72,7 @@ def unit_breakup(metric_unit: str) -> tuple[str, str]:
             possible_unit: str = metric_unit[prefix_length:length]
 
             if units.get(possible_unit) is not None:
-                unit = possible_unit
-                break
 
-    if unit == "":
-        raise Exception("Unit Not In Accepted " + metric_unit)
+                return prefix, possible_unit
 
-    return prefix, unit
+    raise Exception("Unit Not In Accepted " + metric_unit)
