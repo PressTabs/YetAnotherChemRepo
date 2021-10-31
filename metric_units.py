@@ -26,6 +26,8 @@ units: dict[str, Unit] = {
     "torricelli": Unit.TORRICELLI
 }
 
+#   ^^^ These are the only dictionaries that need to be edited
+
 prefix_lengths: list[int] = [len(prefix) for prefix in prefixes]
 unit_lengths: list[int] = [len(unit) for unit in units]
 
@@ -44,90 +46,32 @@ def unit_breakup(metric_unit: str) -> tuple[str, str]:
 
     prefix: str = ""
 
-    #   Kilo, Hecto, Deca, Base, Deci, Centi, Milli
-    #   4,      5,      4,  0,      4,  5,      5
-
     length: int = len(metric_unit)
 
-    if length > 4:
+    for prefix_length in unique_prefix_lengths:
 
-        if metric_unit[0:5] == "milli":
-            prefix = "milli"
+        if length > prefix_length - 1:
 
-        elif metric_unit[0:5] == "centi":
-            prefix = "centi"
+            possible_prefix: str = metric_unit[0:prefix_length]
 
-        elif metric_unit[0:5] == "hecto":
-            prefix = "hecto"
+            if prefixes.get(possible_prefix) is not None:
 
-    if length > 3:
-
-        if metric_unit[0:4] == "kilo":
-            prefix = "kilo"
-
-        elif metric_unit[0:4] == "deca":
-            prefix = "deca"
-
-        elif metric_unit[0:4] == "deci":
-            prefix = "deci"
+                prefix = possible_prefix
+                break
 
     prefix_length: int = len(prefix)
 
     unit: str = ""
 
-    unit_length: int = length - prefix_length
+    for unit_length in unique_unit_lengths:
 
-    #   Gram, Mole, Atmosphere, Liter, Kelvin, Celsius, Torricelli, Atom, Molecule, Particle, Joule
-    #   4,      4,      10,     5,      6,      7,      10,         4,      8,      8           5
+        if length > unit_length - 1:
 
-    if unit_length > 9:
+            possible_unit: str = metric_unit[prefix_length:length]
 
-        if metric_unit[prefix_length:prefix_length+10] == "atmosphere":
-            unit = "atmosphere"
-
-        elif metric_unit[prefix_length:prefix_length+10] == "torricelli":
-            unit = "torricelli"
-
-    if unit_length > 7:
-
-        if metric_unit[prefix_length:prefix_length+8] == "molecule":
-            unit = "molecule"
-
-        elif metric_unit[prefix_length:prefix_length+8] == "particle":
-            unit = "particle"
-
-    if unit_length > 6:
-
-        if metric_unit[prefix_length:prefix_length+7] == "celsius":
-            unit = "celsius"
-
-    if unit_length > 5:
-
-        if metric_unit[prefix_length:prefix_length+6] == "kelvin":
-            unit = "kelvin"
-
-    if unit_length > 4:
-
-        if metric_unit[prefix_length:prefix_length+5] == "liter":
-            unit = "liter"
-
-        elif metric_unit[prefix_length:prefix_length+5] == "joule":
-            unit = "joule"
-
-    if unit_length > 3:
-
-        if metric_unit[prefix_length:prefix_length+4] == "gram":
-            unit = "gram"
-
-        elif metric_unit[prefix_length:prefix_length+4] == "mole":
-            unit = "mole"
-
-        elif metric_unit[prefix_length:prefix_length+4] == "atom":
-            unit = "atom"
-
-    #   I could've wrote all of this procedurally with a list instead. I'll recode it when I add a new unit.
-    #   Yeah this needs a quick recode, it's much slower without a for loop break because of all the copy-pasted
-    #   code and all the unnecessary if checks
+            if units.get(possible_unit) is not None:
+                unit = possible_unit
+                break
 
     if unit == "":
         raise Exception("Unit Not In Accepted " + metric_unit)
