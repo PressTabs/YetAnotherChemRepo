@@ -103,6 +103,4 @@ def formulator(formula: str) -> tuple[list[str], list[int], int]:
 
         subscript_list.append(int(subscript))
 
-        #   Implement charge here
-
     return element_list, subscript_list, charge
