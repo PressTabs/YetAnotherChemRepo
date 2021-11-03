@@ -75,6 +75,18 @@ def get_atomic_number(element: str) -> int:
     return element_data["number"]
 
 
+def get_molar_heat(element: str) -> float:
+
+    element_data: dict[str, str or int or float] = return_element_data(element)
+
+    return float(element_data["molar_heat"])
+
+
+def get_specific_heat(element: str) -> float:
+
+    return get_molar_heat(element) / get_atomic_mass(element)
+
+
 def get_electron_config(element: str) -> tuple[str, str]:
 
     element_data: dict[str, str or int or float] = return_element_data(element)
