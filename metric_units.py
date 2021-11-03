@@ -47,7 +47,7 @@ unique_prefix_lengths.reverse()
 unique_unit_lengths.reverse()
 
 
-def unit_breakup(metric_unit: str) -> tuple[str, str]:
+def unit_breakup(metric_unit: str) -> tuple[str, str, str]:
     """Breaks up a prefix and a unit into the prefix and unit individually"""
 
     prefix: str = ""
@@ -61,6 +61,7 @@ def unit_breakup(metric_unit: str) -> tuple[str, str]:
             possible_prefix: str = metric_unit[0:prefix_length]
 
             if prefixes.get(possible_prefix) is not None:
+
                 prefix = possible_prefix
                 break
 
@@ -70,10 +71,13 @@ def unit_breakup(metric_unit: str) -> tuple[str, str]:
 
         if length > unit_length - 1:
 
-            possible_unit: str = metric_unit[prefix_length:length]
+            possible_unit: str = metric_unit[prefix_length:unit_length + prefix_length]
 
             if units.get(possible_unit) is not None:
-                return prefix, possible_unit
+
+                leftover_str: str = metric_unit[prefix_length + unit_length:length]
+
+                return prefix, possible_unit, leftover_str
 
     raise Exception("Unit Not In Accepted " + metric_unit)
 
