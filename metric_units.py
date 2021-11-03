@@ -83,26 +83,3 @@ def unit_breakup(metric_unit: str) -> tuple[str, str, str]:
 
 
 #   Implement sig figs later :>
-
-def unit_conversion(from_amount: float, from_unit: tuple[str, str], to_unit: tuple[str, str]) -> str:
-    """Returns the work required to convert from one unit to another or throws an error if it's impossible"""
-    from_prefix_value: float = prefixes[from_unit[0]]
-    to_prefix_value: float = prefixes[to_unit[0]]
-
-    work: str = f"({from_amount} {from_unit})"  # (1 mole)(6.022 * 10^23 atoms / 1 mole)
-
-    can_convert: dict[str, set[str]] = {
-
-        "mole": {},
-        "gram": Unit.GRAM,
-        "atom": Unit.ATOM,
-        "liter": Unit.LITER,
-        "joule": Unit.JOULE,
-        "kelvin": Unit.KELVIN,
-        "celsius": Unit.CELSIUS,
-        "particle": Unit.PARTICLE,
-        "molecule": Unit.MOLECULE,
-        "atmosphere": Unit.ATMOSPHERE,
-        "torricelli": Unit.TORRICELLI
-
-    }

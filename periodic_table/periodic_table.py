@@ -1,4 +1,5 @@
 import json
+import os
 
 #   I did not create the PeriodicTableJSON.json file nor the periodic-table-lookup.json file.
 #   Credit for those files is attributed to Bowserinator at
@@ -7,7 +8,7 @@ import json
 #   Advanced type checking lol :>
 #   p_table: dict[str, list[dict[str, str or int or float]]] = {}
 
-with open("periodic-table-lookup.json", encoding="UTF-8") as file:
+with open(os.path.dirname(__file__) + "\\periodic-table-lookup.json", encoding="UTF-8") as file:
 
     p_lookup_table: dict[str, list[str] or dict[str, str or int or float]] = json.load(file)
 
