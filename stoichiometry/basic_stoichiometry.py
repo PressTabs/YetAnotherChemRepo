@@ -1,5 +1,6 @@
 from formulator import formulator
 from periodic_table import periodic_table
+from unit import Unit
 
 
 def has_multiple_upper(string: str) -> bool:
@@ -63,3 +64,58 @@ def get_molar_mass(chemical: str, recursive: bool = False) -> tuple[float, str]:
         work = work[2:]
 
     return molar_mass, work
+
+
+def basic_conversion(amount: float, substance: str, from_unit: Unit, to_unit: Unit) -> tuple[float, str]:
+
+    if not ((from_unit is Unit.GRAM or Unit.ATOM or Unit.MOLECULE or Unit.PARTICLE or Unit.MOLE) and (to_unit is Unit.GRAM or Unit.ATOM or Unit.MOLECULE or Unit.PARTICLE or Unit.MOLE)):
+
+        raise Exception("Unit Not Excepted " + str(from_unit) + " " + str(to_unit))
+
+    work: str = ""
+
+    if from_unit is to_unit:
+
+        return amount, work
+
+    to_amount: float = amount
+
+    work += f"({amount} {from_unit.name} {substance})"
+
+    if from_unit is not Unit.MOLE:
+
+        if from_unit is Unit.ATOM or Unit.MOLECULE or Unit.PARTICLE:
+
+            work += f"(1 mole {substance} / 6.022 * 10 ^ 23 {from_unit.name} {substance})"
+
+            to_amount *= 1 / (6.022 * (10 ** 23))
+
+        else:
+
+            molar_mass: tuple[float, str] = get_molar_mass(substance)
+
+            work += f"(1 mole {substance} / {molar_mass[0]} {from_unit.name} {substance})"
+
+            to_amount *= 1 / molar_mass[0]
+
+    if to_unit is not Unit.MOLE:
+
+        if to_unit is Unit.ATOM or Unit.MOLECULE or Unit.PARTICLE:
+
+            work += f"(6.022 * 10 ^ 23 {to_unit.name} {substance} / 1 mole {substance})"
+
+            to_amount *= 6.022 * (10 ** 23)
+
+        else:
+
+            molar_mass: tuple[float, str] = get_molar_mass(substance)
+
+            work += f"({molar_mass[0]} {to_unit.name} {substance} / 1 mole {substance}"
+
+            to_amount *= molar_mass[0]
+
+    return amount, work
+
+
+
+
