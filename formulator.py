@@ -104,3 +104,5 @@ def formulator(formula: str) -> tuple[list[str], list[int], int]:
         subscript_list.append(int(subscript))
 
     return element_list, subscript_list, charge
+
+#   Still requires the ability to process state of matter and properly sum polyatomic (s)
