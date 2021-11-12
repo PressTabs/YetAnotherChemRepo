@@ -1,21 +1,22 @@
 
 class SigFig:
 
-    __slots__ = "_value", "_num_of_sig_figs", "_sig_figs_start_index", "_crosses_decimal"
+    __slots__ = "_value", "_num_of_sig_figs", "_sig_figs_start_index", "_crosses_decimal", "_decimal_index"
 
     #   Accepting only str for value because float doesn't offer the same amount of precision
     def __init__(self, value: str):
 
         self._value = value
 
-        sig_fig_parsed: tuple[int, int, bool] = SigFig.parse_str(value)
+        sig_fig_parsed: tuple[int, int, bool, int] = SigFig.parse_str(value)
 
         self._num_of_sig_figs = sig_fig_parsed[0]
         self._sig_figs_start_index = sig_fig_parsed[1]
         self._crosses_decimal = sig_fig_parsed[2]
+        self._decimal_index = sig_fig_parsed[3]
 
     @staticmethod
-    def parse_str(value: str) -> tuple[int, int, bool]:
+    def parse_str(value: str) -> tuple[int, int, bool, int]:
 
         if len(value) == 0:
 
@@ -45,8 +46,6 @@ class SigFig:
 
         num_sig_figs: int = is_non_zero[-1] - start_index + 1
 
-        if start_index < decimal_index:
+        num_sig_figs -= int(start_index < decimal_index)
 
-            num_sig_figs -= 1
-
-        return num_sig_figs, start_index, crosses_decimal
+        return num_sig_figs, start_index, crosses_decimal, decimal_index
