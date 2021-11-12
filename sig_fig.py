@@ -1,53 +1,52 @@
 
 class SigFig:
 
-    __slots__ = "_value", "_num_of_sig_figs", "_sig_figs_start_index"
+    __slots__ = "_value", "_num_of_sig_figs", "_sig_figs_start_index", "_crosses_decimal"
 
-    def __init__(self, value: float or str):
+    #   Accepting only str for value because float doesn't offer the same amount of precision
+    def __init__(self, value: str):
 
-        self._value: float = float(value)
+        self._value = value
 
-        number: str = str(value)
+        sig_fig_parsed: tuple[int, int, bool] = SigFig.parse_str(value)
 
+        self._num_of_sig_figs = sig_fig_parsed[0]
+        self._sig_figs_start_index = sig_fig_parsed[1]
+        self._crosses_decimal = sig_fig_parsed[2]
+
+    @staticmethod
+    def parse_str(value: str) -> tuple[int, int, bool]:
+
+        if len(value) == 0:
+
+            raise Exception("Value is length 0")
+
+        #   Because I'm bad at programming we're going to go with a simple scan approach.
+
+        #   A decimal is fine here because due to the law of significant digits it's an absolute cheese.
         crosses_decimal: bool = False
+        decimal_index: int = -1
+        is_non_zero: list[int] = []
 
-        for char_index in range(len(number)):
+        for index, char in enumerate(value):
 
-            char: str = number[char_index]
-
-            if char is not "0":
-
-                self._sig_figs_start_index = char_index
-                break
-
-        end_index: int = len(number) - 1
-
-        while end_index > self._sig_figs_start_index:
-
-            char: str = number[end_index]
-
-            if char is ".":
+            if char == ".":
 
                 crosses_decimal = True
+                decimal_index = index
 
-            elif char is not "0":
+            elif char != "0":
 
-                break
+                is_non_zero.append(index)
 
-            end_index -= 1
+        is_non_zero.append(len(value) - 1)
 
-        self._num_of_sig_figs = end_index - self._sig_figs_start_index + 1 - int(crosses_decimal)
+        start_index: int = is_non_zero[0]
 
-    def set_num_of_sig_figs(self, num: int) -> None:
+        num_sig_figs: int = is_non_zero[-1] - start_index + 1
 
-        self._num_of_sig_figs = num
+        if start_index < decimal_index:
 
-    def __add__(self, other):
+            num_sig_figs -= 1
 
-        if not isinstance(other, SigFig) and type(other) is str or float:
-
-            other_num: SigFig = SigFig(other)
-
-
-
-
+        return num_sig_figs, start_index, crosses_decimal
