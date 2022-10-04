@@ -1,5 +1,4 @@
 from unit import Unit
-from metric_prefix import MetricPrefix
 
 
 class ChemUnit:
@@ -21,12 +20,13 @@ class ChemUnit:
     __slots__ = "_prefix", "_unit", "_abbr_representation", "_representation"
 
     def __init__(self, chem_unit: str):
-
+        pass
 
 
 
 
 
     def __repr__(self) -> str:
+        pass
 
 

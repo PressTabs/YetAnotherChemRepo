@@ -1,6 +1,6 @@
 from formulator import formulator
 from periodic_table import periodic_table
-from unit import Unit
+from units.unit import Unit
 
 
 def has_multiple_upper(string: str) -> bool:
@@ -57,11 +57,14 @@ def get_molar_mass(chemical: str, recursive: bool = False) -> tuple[float, str]:
 
         work += f" + {element_mass} * {subscript}"
 
-    work = work[:len(chemical) + 1] + work[len(chemical) + 3:]
-
     if recursive:
 
-        work = work[2:]
+        pass
+        work = work[3:]
+
+    if not recursive:
+
+        work = work[:len(chemical) + 1] + work[len(chemical) + 3:] + f" = {molar_mass}"
 
     return molar_mass, work
 
